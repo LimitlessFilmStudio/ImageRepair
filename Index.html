@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Photo Repair</title>
+</head>
+<body>
+    <h1>AI Photo Repair</h1>
+    <form id="upload-form">
+        <input type="file" id="photo" accept="image/*" />
+        <button type="submit">Repair Photo</button>
+    </form>
+    <div id="result">
+        <h3>Repaired Photo:</h3>
+        <img id="repaired-photo" src="" alt="Repaired photo will appear here" />
+    </div>
+    <script>
+        const form = document.getElementById('upload-form');
+        const repairedPhoto = document.getElementById('repaired-photo');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('photo').files[0];
+            const formData = new FormData();
+            formData.append('file', fileInput);
+
+            const response = await fetch('http://127.0.0.1:8000/repair-photo/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const repairedPhotoURL = response.url;
+                repairedPhoto.src = repairedPhotoURL;
+            } else {
+                alert('Photo repair failed. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
